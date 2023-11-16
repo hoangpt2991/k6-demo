@@ -25,7 +25,14 @@ jobs:
       uses: grafana/k6-action@v0.3.0
       with:
           filename: sample-script-2/sample.js
- 
+
+    - name: Run k6 cloud test sample-script-3
+      uses: k6io/action@v0.1
+      with:
+        filename: sample-script-3/sample3.js
+        cloud: true
+        token: ${{ secrets.K6_CLOUD_API_TOKEN }}
+
     - name: Store performance test results JSON
       uses: actions/upload-artifact@v3
       with:
