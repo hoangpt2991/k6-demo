@@ -1,0 +1,41 @@
+name: K6 Script Execution By Folders
+ 
+on:
+  workflow_dispatch:
+  push:
+ 
+jobs:
+  run_k6_scripts:
+    runs-on: ubuntu-latest
+ 
+    env:
+      VUS: ${{ github.event.inputs.vus || 10 }}
+      DURATION: ${{ github.event.inputs.duration || '60s' }}
+      
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run k6 local sample-script-1
+      uses: grafana/k6-action@v0.3.0
+      with:
+          filename: sample-script-1/sample.js
+ 
+    - name: Run k6 local sample-script-2
+      uses: grafana/k6-action@v0.3.0
+      with:
+          filename: sample-script-2/sample.js
+ 
+    - name: Store performance test results JSON
+      uses: actions/upload-artifact@v3
+      with:
+        name: k6-summary-report
+        path: "*.json"
+        retention-days: 2
+ 
+    - name: Store performance test results HTML
+      uses: actions/upload-artifact@v3
+      with:
+        name: k6-html-report
+        path: "*.html"
+        retention-days: 2
